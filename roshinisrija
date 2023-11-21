@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.16/dist/tailwind.min.css" rel="stylesheet">
+    <title>Registration Form</title>
+    <h1 class="text-blue-600 font-bold ">Registration form</h1>
+</head>
+<body class="bg-gray-100 p-8">
+
+    <form id="registrationForm" class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
+        <div class="mb-4">
+            <label class="block text-gray-700 text-sm font-bold mb-2" for="name">Name:</label>
+            <input type="text" id="name" name="name" required class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+        </div>
+
+        <div class="mb-4">
+            <label class="block text-gray-700 text-sm font-bold mb-2" for="email">Email:</label>
+            <input type="email" id="email" name="email" required class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+        </div>
+
+        <div class="mb-4">
+            <label lass="block text-gray-700 text-sm font-bold mb-2" for="password">Password:</label>
+            <input type="password" id="password" name="password" required class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+        </div>
+
+        <div class="mb-4">
+            <label lass="block text-gray-700 text-sm font-bold mb-2" for="dob">Date of Birth:</label>
+            <input type="date" id="dob" name="dob" required class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline">
+        </div>
+
+        <div class="mb-4">
+            <input type="checkbox" id="terms" name="terms" required class="form-checkbox h-4 w-4 text-blue-600 rounded focus:outline-none focus:shadow-outline">
+            <label for="terms">I accept the terms and conditions</label>
+        </div>
+
+        <button type="submit" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline">Submit</button>
+    </form>
+
+    <table id="entriesTable" class="mt-8">
+        <thead>
+            <tr>
+                <th class="border px-4 py-2">Name</th>
+                <th class="border px-4 py-2">Email</th>
+                <th class="border px-4 py-2">Password</th>
+                <th class="border px-4 py-2"> Dob</th>
+                <th class="border px-4 py-2">Accepted terms?</th>
+            </tr>
+        </thead>
+        <tbody>
+            
+        </tbody>
+    </table>
+
+    
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const form = document.getElementById('registrationForm');
+        const tableBody = document.querySelector('#entriesTable tbody');
+
+        form.addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            // Reset validation messages
+            resetValidationMessages();
+
+            // Validate form inputs
+            if (validateForm()) {
+                // If form is valid, add data to table and local storage
+                addEntryToTable();
+                saveEntryToLocalstorage();
+                form.reset(); // Clear the form
+            }
+        });
+
+        function resetValidationMessages() {
+            // Reset validation messages here (if any)
+        }
+
+        function validateForm() {
+            // Implement your form validation logic here
+            // Check name, email, password, dob, and terms
+            // Display validation messages if needed
+
+            // Example age validation (between 18 and 55)
+            const dobInput = document.getElementById('dob');
+            const dobValue = new Date(dobInput.value);
+            const today = new Date();
+            const minAgeDate = new Date(today);
+            minAgeDate.setFullYear(today.getFullYear() - 55);
+            const maxAgeDate = new Date(today);
+            maxAgeDate.setFullYear(today.getFullYear() - 18);
+
+            if (dobValue < minAgeDate || dobValue > maxAgeDate) {
+                alert('Age must be between 18 and 55.');
+                return false;
+            }
+
+            return true;
+        }
+
+        function addEntryToTable() {
+            // Get form values
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const dob = document.getElementById('dob').value;
+            const terms = document.getElementById('terms').checked;
+
+            // Create a new row in the table
+            const newRow = tableBody.insertRow();
+            newRow.innerHTML = `<td>${name}</td><td>${email}</td><td>${password}</td><td>${dob}</td><td>${terms}</td>`;
+        }
+
+        function saveEntryToLocalstorage() {
+            // Get existing entries from local storage or initialize an empty array
+            const entries = JSON.parse(localStorage.getItem('userEntries')) || [];
+
+            // Get form values
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const dob = document.getElementById('dob').value;
+            const terms = document.getElementById('terms').checked;
+
+            // Add new entry to the array
+            const newEntry = { name, email, password, dob, terms };
+            entries.push(newEntry);
+
+            // Save the updated entries array to local storage
+            localStorage.setItem('userEntries', JSON.stringify(entries));
+        }
+    });
+</script>
+
+
+
+
+</body>
+</html>
