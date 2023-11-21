@@ -53,12 +53,14 @@
         </tbody>
     </table>
 
-    
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         const form = document.getElementById('registrationForm');
         const tableBody = document.querySelector('#entriesTable tbody');
+
+        // Load entries from local storage on page load
+        loadEntriesFromLocalStorage();
 
         form.addEventListener('submit', function (event) {
             event.preventDefault();
@@ -131,9 +133,30 @@
 
             // Save the updated entries array to local storage
             localStorage.setItem('userEntries', JSON.stringify(entries));
+
+            // Refresh entries in the table
+            loadEntriesFromLocalStorage();
+        }
+
+        function loadEntriesFromLocalStorage() {
+            // Clear existing rows in the table
+            tableBody.innerHTML = '';
+
+            // Get entries from local storage
+            const entries = JSON.parse(localStorage.getItem('userEntries')) || [];
+
+            // Add entries to the table
+            entries.forEach(entry => {
+                const newRow = tableBody.insertRow();
+                newRow.innerHTML = `<td>${entry.name}</td><td>${entry.email}</td><td>${entry.password}</td><td>${entry.dob}</td><td>${entry.terms}</td>`;
+            });
         }
     });
 </script>
+
+</body>
+</html>
+
 
 
 
